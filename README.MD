@@ -9,7 +9,6 @@
  ## 项目结构
  
  ```undefined
- /
  ├── app
  │   ├── api
  │   ├── model
