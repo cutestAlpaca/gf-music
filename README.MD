@@ -1,6 +1,13 @@
 # 基于 GoFrame 框架
  https://goframe.org
  ****
+ 
+ ##限制
+ golang版本 >= 1.11
+ 
+ ####代理地址使用
+ https://goproxy.io
+ 
  ## 架构
  <div align=center>
  <img src="https://goframe.org/images/arch.png?v=12"/>
