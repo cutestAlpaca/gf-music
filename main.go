@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "gf-app/boot"
-	_ "gf-app/router"
+	_ "gf-music/boot"
+	_ "gf-music/router"
 	"github.com/gogf/gf/frame/g"
 )
 
