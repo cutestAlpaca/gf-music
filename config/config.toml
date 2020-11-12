@@ -7,7 +7,7 @@
 
 # Logger.
 [logger]
-    Path        = "log/gf-music"
+    Path        = "log/gf-music/logger"
     Level       = "all"
     Stdout      = true
 
@@ -19,7 +19,7 @@
 
 # Database.
 [database]
-    link  = "mysql:koko:123456@tcp(127.0.0.1:3306)/go-music"
+    link  = "mysql:root:123456@tcp(127.0.0.1:33060)/go-music"
     debug = true
     # Database logger.
     [database.logger]
@@ -29,12 +29,7 @@
 
 
 #jwt配置
-[gToken]
-    CacheMode = 1
-    CacheKey = "GToken:"
-    Timeout = 0
-    MaxRefresh = 0
-    TokenDelimiter="_"
-    EncryptKey = "koi29a83idakguqjq29asd9asd8a7jhq"
-    AuthFailMsg = "登录超时，请重新登录"
-    MultiLogin = true
+[jwt]
+    ExpiresAt = 1 # 3600000000000秒 == 1天 默认设置为1天
+    RefreshAt = 168 # 3600000000000秒 == 1天 , 24 * 7 = 168 刷新的token设置为一星期
+    SigningKey = "koi29a83idakguqjq29asd9asd8a7jhq"

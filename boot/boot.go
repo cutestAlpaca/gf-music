@@ -12,7 +12,7 @@ import (
 func init() {
 	_ = gtime.SetTimeZone("Asia/Shanghai") //设置系统时区
 
-	initGfToken()
+	//initGfToken()
 
 	showLogo()
 }
