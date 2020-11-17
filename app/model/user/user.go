@@ -5,8 +5,25 @@
 package user
 
 import (
+	"github.com/gogf/gf/os/gtime"
 	"golang.org/x/crypto/bcrypt"
 )
+
+type User struct {
+	Id         int         `orm:"id,primary"      json:"id"`          // 主键
+	Uuid       string      `orm:"uuid"            json:"uuid"`        // UUID
+	Username   string      `orm:"username,unique" json:"username"`    // 登录名
+	Password   string      `orm:"password"        json:"password"`    // 密码
+	Sex        int         `orm:"sex"             json:"sex"`         // 性别;0:保密,1:男,2:女
+	Enable     int         `orm:"enable"          json:"enable"`      // 是否启用//radio/1,启用,2,禁用
+	UpdateTime *gtime.Time `orm:"update_time"     json:"update_time"` // 更新时间
+	CreateTime *gtime.Time `orm:"create_time"     json:"create_time"` // 创建时间
+	CreateId   int         `orm:"create_id"       json:"create_id"`   // 创建者
+	IsAdmin    int         `orm:"is_admin"        json:"is_admin"`    // 是否后台管理员 1 是  0   否
+	Remark     string      `orm:"remark"          json:"remark"`      // 备注
+	Avatar     string      `orm:"avatar"          json:"avatar"`      // 头像
+	UserEmail  string      `orm:"user_email"      json:"user_email"`  // 用户邮箱
+}
 
 // RecordNotFound 根据条件判断数据是否存在
 // 有数据返回false

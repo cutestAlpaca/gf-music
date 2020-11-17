@@ -10,8 +10,8 @@ import (
 
 var Version = "1.0.0"
 
-func Login(l *request.Login) (data *user.Entity, err error) {
-	user := (*user.Entity)(nil) // 用法解释 https://goframe.org/database/gdb/chaining/select#tip4
+func Login(l *request.Login) (data *user.User, err error) {
+	user := (*user.User)(nil) // 用法解释 https://goframe.org/database/gdb/chaining/select#tip4
 	userDb := g.DB("default").Table("user").Safe()
 	//authorityDb := g.DB("default").Table("authorities").Safe()
 	if err = userDb.Where(g.Map{"username": l.Username}).Scan(&user); err != nil {
