@@ -21,6 +21,8 @@
 [database]
     link  = "mysql:root:123456@tcp(127.0.0.1:33060)/go-music"
     debug = true
+    CreatedAt = "CreateTime"
+    UpdatedAt = "UpdateTime"
     # Database logger.
     [database.logger]
         Path   = "log/gf-music/sql"

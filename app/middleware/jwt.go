@@ -3,7 +3,7 @@ package middleware
 import (
 	"fmt"
 	v1 "gf-music/app/api/v1"
-	"gf-music/library/response"
+	"gf-music/library/global"
 
 	jwt "github.com/gogf/gf-jwt"
 
@@ -16,18 +16,18 @@ import (
 func JwtAuth(r *ghttp.Request) {
 	v1.GfJWTMiddleware.MiddlewareFunc()(r)
 	Token, err := v1.GfJWTMiddleware.ParseToken(r) // 解析token
-	fmt.Printf("token :%v\n",Token)
+	fmt.Printf("token :%v\n", Token)
 	if err != nil {
 		if err == jwt.ErrExpiredToken {
-			response.Result(r, response.ERROR, g.Map{"reload": true}, "授权已过期")
+			global.Result(r, global.ERROR, g.Map{"reload": true}, "授权已过期")
 			r.ExitAll()
 		}
-		response.Result(r, response.ERROR, g.Map{"reload": true}, err.Error())
+		global.Result(r, global.ERROR, g.Map{"reload": true}, err.Error())
 		r.ExitAll()
 	}
 	//token := Token.Raw
 	//if service.IsBlacklist(token) {
-	//	response.Result(r, response.ERROR, g.Map{"reload": true}, "您的帐户异地登陆或令牌失效")
+	//	global.Result(r, global.ERROR, g.Map{"reload": true}, "您的帐户异地登陆或令牌失效")
 	//	r.ExitAll()
 	//}
 	var claims = gconv.Map(Token.Claims)
@@ -35,7 +35,7 @@ func JwtAuth(r *ghttp.Request) {
 	r.SetParam("user_authority_id", claims["user_authority_id"])
 	//if g.Cfg().GetBool("system.UseMultipoint") {
 	//	if !ValidatorRedisToken(gconv.String(claims["admin_uuid"]), token) {
-	//		response.FailWithMessage(r, "Token鉴权失败")
+	//		global.FailWithMessage(r, "Token鉴权失败")
 	//		r.Exit()
 	//	}
 	//}

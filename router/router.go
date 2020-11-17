@@ -5,7 +5,7 @@ func init() {
 	InitUsersRouter()
 	//s := g.Server()
 	//
-	//s.SetRewrite("/favicon.ico", "response/image/favicon.ico")
+	//s.SetRewrite("/favicon.ico", "global/image/favicon.ico")
 	//
 	//s.Group("/", func(group *ghttp.RouterGroup) {
 	//	group.ALL("/", hello.Hello)

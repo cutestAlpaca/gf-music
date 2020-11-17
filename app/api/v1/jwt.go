@@ -1,8 +1,14 @@
 package v1
 
 import (
+	"gf-music/app/api/request"
+	"gf-music/app/api/response"
+	"gf-music/app/model/user"
+	"gf-music/app/service"
+	"github.com/gogf/gf/util/gconv"
+
 	//"errors"
-	"gf-music/library/response"
+	"gf-music/library/global"
 	//"server/app/api/request"
 	//"server/app/model/admins"
 	//"server/app/model/jwts"
@@ -86,64 +92,61 @@ func IdentityHandler(r *ghttp.Request) interface{} {
 // Unauthorized is used to define customized Unauthorized callback function.
 // Unauthorized 用于定义自定义的未经授权的回调函数。
 func Unauthorized(r *ghttp.Request, code int, message string) {
-	response.FailWithDetailed(r, code, g.Map{"reload": true}, "未登录或非法访问或" + message)
+	global.FailWithDetailed(r, code, g.Map{"reload": true}, "未登录或非法访问或"+message)
 	r.ExitAll()
 }
 
 // LoginResponse is used to define customized login-successful callback function.
 // LoginResponse 用于定义自定义的登录成功回调函数
 func LoginResponse(r *ghttp.Request, code int, token string, expire time.Time) {
-	g.Log().Println("LoginResponse,登陆成功！")
-	response.OkDetailed(r, g.Map{
-		"code":   code,
-		"token":  token,
-		"expire": expire.Format(time.RFC3339),
-	}, "登录成功!")
-
-	r.Exit()
-
-	//admin := (*admins.AdminHasOneAuthority)(nil)
-	//if err := gconv.Struct(r.GetParam("admin"), &admin); err != nil {
-	//	response.FailWithMessage(r, "登录失败")
-	//	r.Exit()
-	//}
-	//if !g.Cfg("system").GetBool("system.UseMultipoint") {
-	//	response.OkDetailed(r, response.AdminLogin{User: admin, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
-	//	r.Exit()
-	//}
-	//redisJwt, err := service.GetRedisJWT(admin.Uuid)
-	//if redisJwt == "" {
-	//	if err := service.SetRedisJWT(admin.Uuid, token); err != nil {
-	//		response.Result(r, code, g.Map{}, "设置登录状态失败")
-	//		r.Exit()
-	//	}
-	//	response.OkDetailed(r, response.AdminLogin{User: admin, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
-	//	r.Exit()
-	//}
-	//if err = service.JsonInBlacklist(&jwts.Entity{Jwt: redisJwt}); err != nil {
-	//	response.Result(r, code, g.Map{}, "jwt作废失败")
-	//	r.Exit()
-	//}
-	//if err := service.SetRedisJWT(admin.Uuid, token); err != nil {
-	//	response.Result(r, code, g.Map{}, "设置登录状态失败")
-	//	r.Exit()
-	//}
-	//response.OkDetailed(r, g.Map{"User": "admin", "Token": "token", "ExpiresAt": expire.Unix() * 1000}, "登录成功!")
-	//g.Log().Println("LoginResponse")
-	//response.OkDetailed(r, g.Map{"User": "admin", "Token": "token", "ExpiresAt": expire.Unix() * 1000}, "登录成功!")
+	//global.OkDetailed(r, g.Map{
+	//	"code":   code,
+	//	"token":  token,
+	//	"expire": expire.Format(time.RFC3339),
+	//}, "登录成功!")
+	//
 	//r.Exit()
+
+	user := (*user.Entity)(nil)
+	if err := gconv.Struct(r.GetParam("user"), &user); err != nil {
+		global.FailWithMessage(r, "登录失败")
+		r.Exit()
+	}
+	if !g.Cfg("system").GetBool("system.UseMultipoint") {
+		global.OkDetailed(r, response.AdminLogin{User: user, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
+		r.Exit()
+	}
+	redisJwt, _ := service.GetRedisJWT(user.Uuid)
+	if redisJwt == "" {
+		if err := service.SetRedisJWT(user.Uuid, token); err != nil {
+			global.Result(r, code, g.Map{}, "设置登录状态失败")
+			r.Exit()
+		}
+		global.OkDetailed(r, response.AdminLogin{User: user, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
+		r.Exit()
+	}
+	//if err = service.JsonInBlacklist(&jwts.Entity{Jwt: redisJwt}); err != nil {
+	//	global.Result(r, code, g.Map{}, "jwt作废失败")
+	//	r.Exit()
+	//}
+	if err := service.SetRedisJWT(user.Uuid, token); err != nil {
+		global.Result(r, code, g.Map{}, "设置登录状态失败")
+		r.Exit()
+	}
+	global.OkDetailed(r, response.AdminLogin{User: user, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
 }
 
 // RefreshResponse is used to get a new token no matter current token is expired or not.
 // RefreshResponse 用于获取新令牌，无论当前令牌是否过期。
+// 此功能暂时不用
 func RefreshResponse(r *ghttp.Request, code int, token string, expire time.Time) {
 	//if service.IsBlacklist(token) {
-	//	response.Result(r, response.ERROR, g.Map{"reload": true}, "您的帐户异地登陆或令牌失效")
+	//	global.Result(r, global.ERROR, g.Map{"reload": true}, "您的帐户异地登陆或令牌失效")
 	//	r.ExitAll()
 	//}
 	//Token, err := GfJWTMiddleware.ParseToken(r) // 解析token
 	//if err != nil {
-	//	response.FailWithMessage(r, "Token不正确,更新失败")
+	//	global.FailWithMessage(r, "Token不正确,更新失败")
 	//	r.Exit()
 	//}
 	//var (
@@ -153,28 +156,29 @@ func RefreshResponse(r *ghttp.Request, code int, token string, expire time.Time)
 	//)
 	//admin, err = service.FindAdmin(gconv.String(claims["admin_uuid"]))
 	//if err != nil {
-	//	response.FailWithMessage(r, "刷新Token失败")
+	//	global.FailWithMessage(r, "刷新Token失败")
 	//	r.Exit()
 	//}
 	//if !g.Cfg("system").GetBool("system.UseMultipoint") {
-	//	response.OkDetailed(r, response.AdminLogin{User: admin, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
+	//	global.OkDetailed(r, global.AdminLogin{User: admin, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
 	//	r.Exit()
 	//}
 	//if redisJwt, err = service.GetRedisJWT(admin.Uuid); err != nil {
-	//	response.FailWithMessage(r, "刷新Token失败")
+	//	global.FailWithMessage(r, "刷新Token失败")
 	//	r.Exit()
 	//}
 	//if err == nil && redisJwt != "" {
 	//	if err = service.JsonInBlacklist(&jwts.Entity{Jwt: redisJwt}); err != nil {
-	//		response.Result(r, code, g.Map{}, "jwt作废失败")
+	//		global.Result(r, code, g.Map{}, "jwt作废失败")
 	//		r.Exit()
 	//	}
 	//	if err := service.SetRedisJWT(admin.Uuid, token); err != nil {
-	//		response.Result(r, code, g.Map{}, "设置登录状态失败")
+	//		global.Result(r, code, g.Map{}, "设置登录状态失败")
 	//		r.Exit()
 	//	}
 	//}
-	//response.OkDetailed(r, response.AdminLogin{User: admin, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
+	//global.OkDetailed(r, global.AdminLogin{User: admin, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
+	g.Log().Println("/index/refresh")
 	r.ExitAll()
 }
 
@@ -185,23 +189,16 @@ func RefreshResponse(r *ghttp.Request, code int, token string, expire time.Time)
 // 它必须返回用户数据作为用户标识符，并将其存储在Claim Array中。
 // 检查错误（e），以确定适当的错误消息。
 func Authenticator(r *ghttp.Request) (interface{}, error) {
-	g.Log().Println("Authenticator")
-	username := r.GetParam("username")
-	password := r.GetParam("password")
-	//var L request.AdminLogin
-	//if err := r.Parse(&L); err != nil {
-	//	response.FailWithMessage(r, err.Error())
-	//	r.Exit()
-	//}
-	//if !service.Store.Verify(L.CaptchaId, L.Captcha, true) { // 验证码校对
-	//	return nil, errors.New("验证码错误")
-	//}
-	//admin, err := service.AdminLogin(&L)
-	//if err != nil {
-	//	response.FailWithMessage(r, err.Error())
-	//	r.ExitAll()
-	//}
-	r.SetParam("admin", g.Map{"username": username, "password":password}) // 设置参数保存到请求中
-	//return g.Map{"admin_uuid": admin.Uuid, "admin_id": admin.Id, "admin_nickname": admin.Nickname, "admin_authority_id": admin.AuthorityId}, nil
-	return g.Map{"username": username, "password": password}, nil
+	var L request.Login
+	if err := r.Parse(&L); err != nil {
+		global.FailWithMessage(r, err.Error())
+		r.Exit()
+	}
+	user, err := service.Login(&L)
+	if err != nil {
+		global.FailWithMessage(r, err.Error())
+		r.ExitAll()
+	}
+	r.SetParam("user", user) // 设置参数保存到请求中
+	return g.Map{"user_uuid": user.Uuid, "user_id": user.Id, "user_username": user.Username}, nil
 }

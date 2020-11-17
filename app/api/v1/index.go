@@ -8,11 +8,7 @@ import (
 	"github.com/gogf/gf/net/ghttp"
 )
 
-func Hello(r *ghttp.Request) {
-	r.Response.Writeln("Hello World!")
-}
-
-func Login(r *ghttp.Request) {
+func Register(r *ghttp.Request) {
 	var R *request.Register
 	if err := r.Parse(&R); err != nil {
 		global.FailWithMessage(r, err.Error())

@@ -1,4 +1,4 @@
-package response
+package global
 
 import (
 	"github.com/gogf/gf/frame/g"
@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	ERROR   = 7
-	SUCCESS = 0
+	ERROR     = 7
+	SUCCESS   = 0
 	ErrorCode = 400
 )
 
