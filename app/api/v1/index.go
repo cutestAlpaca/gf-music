@@ -20,3 +20,8 @@ func Register(r *ghttp.Request) {
 	}
 	global.OkDetailed(r, g.Map{}, "注册成功!")
 }
+
+func Index(r *ghttp.Request) {
+
+	global.JsonExit(r, 200, "", g.Map{"a": "a"})
+}
