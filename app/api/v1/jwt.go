@@ -99,21 +99,13 @@ func Unauthorized(r *ghttp.Request, code int, message string) {
 // LoginResponse is used to define customized login-successful callback function.
 // LoginResponse 用于定义自定义的登录成功回调函数
 func LoginResponse(r *ghttp.Request, code int, token string, expire time.Time) {
-	//global.OkDetailed(r, g.Map{
-	//	"code":   code,
-	//	"token":  token,
-	//	"expire": expire.Format(time.RFC3339),
-	//}, "登录成功!")
-	//
-	//r.Exit()
-
 	user := (*user.Entity)(nil)
 	if err := gconv.Struct(r.GetParam("user"), &user); err != nil {
 		global.FailWithMessage(r, "登录失败")
 		r.Exit()
 	}
 	if !g.Cfg("system").GetBool("system.UseMultipoint") {
-		global.OkDetailed(r, response.AdminLogin{User: user, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
+		global.OkDetailed(r, response.Login{User: user, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
 		r.Exit()
 	}
 	redisJwt, _ := service.GetRedisJWT(user.Uuid)
@@ -122,7 +114,7 @@ func LoginResponse(r *ghttp.Request, code int, token string, expire time.Time) {
 			global.Result(r, code, g.Map{}, "设置登录状态失败")
 			r.Exit()
 		}
-		global.OkDetailed(r, response.AdminLogin{User: user, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
+		global.OkDetailed(r, response.Login{User: user, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
 		r.Exit()
 	}
 	//if err = service.JsonInBlacklist(&jwts.Entity{Jwt: redisJwt}); err != nil {
@@ -133,7 +125,7 @@ func LoginResponse(r *ghttp.Request, code int, token string, expire time.Time) {
 		global.Result(r, code, g.Map{}, "设置登录状态失败")
 		r.Exit()
 	}
-	global.OkDetailed(r, response.AdminLogin{User: user, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
+	global.OkDetailed(r, response.Login{User: user, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
 }
 
 // RefreshResponse is used to get a new token no matter current token is expired or not.
@@ -160,7 +152,7 @@ func RefreshResponse(r *ghttp.Request, code int, token string, expire time.Time)
 	//	r.Exit()
 	//}
 	//if !g.Cfg("system").GetBool("system.UseMultipoint") {
-	//	global.OkDetailed(r, global.AdminLogin{User: admin, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
+	//	global.OkDetailed(r, global.Login{User: admin, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
 	//	r.Exit()
 	//}
 	//if redisJwt, err = service.GetRedisJWT(admin.Uuid); err != nil {
@@ -177,7 +169,7 @@ func RefreshResponse(r *ghttp.Request, code int, token string, expire time.Time)
 	//		r.Exit()
 	//	}
 	//}
-	//global.OkDetailed(r, global.AdminLogin{User: admin, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
+	//global.OkDetailed(r, global.Login{User: admin, Token: token, ExpiresAt: expire.Unix() * 1000}, "登录成功!")
 	g.Log().Println("/index/refresh")
 	r.ExitAll()
 }

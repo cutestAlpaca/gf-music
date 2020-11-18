@@ -5,13 +5,13 @@ import (
 )
 
 // AdminLogin response Structure
-type AdminLogin struct {
+type Login struct {
 	User      *user.Entity `json:"user"`
 	Token     string       `json:"token"`
 	ExpiresAt int64        `json:"expiresAt"`
 }
 
 // AdminResponse response Structure
-type AdminResponse struct {
+type Response struct {
 	Admin *user.Entity `json:"user"`
 }

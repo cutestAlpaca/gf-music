@@ -27,7 +27,7 @@ type Entity struct {
 	LoginIp    string      `orm:"login_ip"        json:"login_ip"`    // 登录ip
 	Remark     string      `orm:"remark"          json:"remark"`      // 备注
 	Avatar     string      `orm:"avatar"          json:"avatar"`      // 头像
-	UserEmail  string      `orm:"user_email"      json:"user_email"`  // 用户头像
+	UserEmail  string      `orm:"user_email"      json:"user_email"`  // 用户邮箱
 	Birthday   string      `orm:"birthday"        json:"birthday"`    // 用户生日-默认注册时间
 }
 
