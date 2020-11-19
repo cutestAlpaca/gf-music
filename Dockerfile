@@ -1,20 +1,22 @@
-FROM loads/alpine:3.8
+FROM golang
 
-LABEL maintainer="john@goframe.org"
+LABEL maintainer="alpaca5541@foxmail.com"
 
 ###############################################################################
 #                                INSTALLATION
 ###############################################################################
 
 # 设置固定的项目路径
-ENV WORKDIR /home/koko/code/goCode/gf-music
+ENV WORKDIR /var/www/main
 
 # 添加应用可执行文件，并设置执行权限
-ADD ./bin/linux_amd64/main   $WORKDIR/main
+ADD ./gf-music   $WORKDIR/main
+ADD log $WORKDIR/log
 RUN chmod +x $WORKDIR/main
 
 # 添加I18N多语言文件、静态文件、配置文件、模板文件
 ADD i18n     $WORKDIR/i18n
+# 添加静态文件、配置文件、模板文件
 ADD public   $WORKDIR/public
 ADD config   $WORKDIR/config
 ADD template $WORKDIR/template
@@ -23,4 +25,5 @@ ADD template $WORKDIR/template
 #                                   START
 ###############################################################################
 WORKDIR $WORKDIR
-CMD ./main
+#ENTRYPOINT mkdir $WORKDIR/log
+CMD $WORKDIR/main
