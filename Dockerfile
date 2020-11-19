@@ -11,6 +11,7 @@ ENV WORKDIR /var/www/main
 
 # 添加应用可执行文件，并设置执行权限
 ADD ./gf-music   $WORKDIR/main
+#暂时添加log文件
 ADD log $WORKDIR/log
 RUN chmod +x $WORKDIR/main
 
