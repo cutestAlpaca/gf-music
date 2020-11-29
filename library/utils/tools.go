@@ -17,7 +17,6 @@ import (
 
 const PublicKey = "HqmP1KLMuz09Q0Bu"
 
-
 //服务端ip
 func GetLocalIP() (ip string, err error) {
 	address, err := net.InterfaceAddrs()
@@ -110,7 +109,6 @@ func GetCityByIp(ip string) string {
 	}
 }
 
-
 //获取当前请求接口域名
 func GetDomain(r *ghttp.Request) (string, error) {
 	pathInfo, err := gurl.ParseURL(r.GetUrl(), -1)
@@ -131,4 +129,22 @@ func EncryptCBC(plainText, publicKey string) string {
 		return ""
 	}
 	return gbase64.EncodeToString(b)
+}
+
+// 微信通知
+func WeChatNotification(title, content string) bool {
+	if res, err := g.Client().Post(g.Cfg("private").GetString("wechat.url"), g.Map{
+		"title":   title,
+		"content": content,
+	}); err != nil {
+		g.Log().Printf("%v\n", res)
+		return false
+	} else {
+		if res.Response.StatusCode == 200 {
+			return true
+		}
+		defer res.Close()
+	}
+
+	return true
 }

@@ -4,6 +4,7 @@ import (
 	"gf-music/app/api/request"
 	"gf-music/app/service"
 	"gf-music/library/global"
+	"gf-music/library/utils"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 )
@@ -14,7 +15,7 @@ func Register(r *ghttp.Request) {
 		global.FailWithMessage(r, err.Error())
 		r.Exit()
 	}
-	if err := service.Register(R); err != nil {
+	if err := service.Register(R, r.GetClientIp()); err != nil {
 		global.FailWithMessage(r, err.Error())
 		r.ExitAll()
 	}
@@ -22,6 +23,6 @@ func Register(r *ghttp.Request) {
 }
 
 func Index(r *ghttp.Request) {
+	utils.WeChatNotification("a", "b")
 
-	global.JsonExit(r, 200, "", g.Map{"a": "a"})
 }
