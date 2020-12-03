@@ -7,12 +7,13 @@ import (
 )
 
 func InitIndexRouter() {
-	IndexRouter := g.Server().Group("index").Middleware(
+	IndexRouter := g.Server().Group("api/index").Middleware(
 		middleware.CORS,
 	)
 	{
 		IndexRouter.POST("register", v1.Register)
 		IndexRouter.POST("index", v1.Index)
 		IndexRouter.POST("refresh", v1.GfJWTMiddleware.RefreshHandler)
+		IndexRouter.POST("login", v1.GfJWTMiddleware.LoginHandler)
 	}
 }

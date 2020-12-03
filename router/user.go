@@ -14,6 +14,5 @@ func InitUsersRouter() {
 	)
 	{
 		UserRouter.POST("hello", v1.Hello)
-		UserRouter.POST("login", v1.GfJWTMiddleware.LoginHandler)
 	}
 }

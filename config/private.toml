@@ -9,3 +9,4 @@
     AccessKey = "dp50sTuARMeOk6FBC9GruqGtdAdO0X3-jMR3wHqj"
     SecretKey = "gx0kITZdk-0tIPTsJyza3Q1iNXiFzJadHrCFR9i8"
     UseCdnDomains = false # 上传是否使用CDN上传加速
+    Url = "http://store.ssdog.cn/"
