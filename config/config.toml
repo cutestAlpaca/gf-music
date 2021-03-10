@@ -19,7 +19,7 @@
 
 # Database.
 [database]
-    link  = "mysql:root:123456@tcp(mysql:3306)/go-music"
+    link  = "mysql:root:123456@tcp(localhost:3306)/go-music"
     debug = true
     CreatedAt = "CreateTime"
     UpdatedAt = "UpdateTime"

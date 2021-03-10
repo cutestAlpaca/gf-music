@@ -73,7 +73,8 @@ func (*Qiniu) DeleteFile(key string) error {
 // config 根据配置文件进行返回七牛云的配置
 func qiniuConfig() *storage.Config {
 	cfg := storage.Config{UseHTTPS: qUseHTTPS, UseCdnDomains: qUseCdnDomains}
-	switch qZone { // 根据配置文件进行初始化空间对应的机房
+	// 根据配置文件进行初始化空间对应的机房
+	switch qZone {
 	case "ZoneHuadong":
 		cfg.Zone = &storage.ZoneHuadong
 	case "ZoneHuabei":
