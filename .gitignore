@@ -18,4 +18,4 @@ main
 .vscode
 go.sum
 /gf-music
-config/privte.toml
+config/private.toml
