@@ -19,5 +19,6 @@ func InitIndexRouter() {
 		IndexRouter.POST("login", v1.GfJWTMiddleware.LoginHandler)
 		IndexRouter.POST("index", v1.Index)
 		IndexRouter.POST("refresh", v1.GfJWTMiddleware.RefreshHandler)
+		IndexRouter.POST("login", v1.GfJWTMiddleware.LoginHandler)
 	}
 }
