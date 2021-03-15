@@ -8,12 +8,15 @@ import (
 
 // InitAdminsRouter 注册管理员路由
 func InitUsersRouter() {
-	UserRouter := g.Server().Group("user").Middleware(
-		middleware.JwtAuth,
+	UserRouter := g.Server().Group("api/user").Middleware(
 		middleware.CORS,
+		middleware.JwtAuth,
 	)
 	{
+<<<<<<< HEAD
+		UserRouter.ALL("hello", v1.Hello)
+=======
 		UserRouter.POST("hello", v1.Hello)
-		UserRouter.POST("login", v1.GfJWTMiddleware.LoginHandler)
+>>>>>>> 9fe917b75b6123615d240c665a2d6bcb3a47d694
 	}
 }

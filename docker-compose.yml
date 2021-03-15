@@ -1,0 +1,27 @@
+version: "3"
+services:
+  web:
+    build: .
+    ports:
+    - "8080:8199"
+    links:
+      - "mysql"
+      - "redis"
+    tty: true #启动成功，并且可以成功进入容器进行操作
+    volumes:
+    - /home/koko/code/dockerFile/gf-music/log:/var/www/main/log
+
+  mysql:
+    container_name: "gf-mysql"
+    image: "mysql:5.7"
+    volumes:
+      - /home/koko/code/dockerFile/gf-mysql/conf:/etc/mysql/conf.d
+      - /home/koko/code/dockerFile/gf-mysql/data:/var/lib/mysql
+      - /home/koko/code/dockerFile/gf-mysql/logs:/var/log/mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=123456"
+      - "TZ=Asia/Shanghai"
+    ports:
+    - "33060:3306"
+  redis:
+    image: "redis:alpine"

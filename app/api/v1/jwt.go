@@ -99,7 +99,7 @@ func Unauthorized(r *ghttp.Request, code int, message string) {
 // LoginResponse is used to define customized login-successful callback function.
 // LoginResponse 用于定义自定义的登录成功回调函数
 func LoginResponse(r *ghttp.Request, code int, token string, expire time.Time) {
-	user := (*user.Entity)(nil)
+	user := (*user.User)(nil)
 	if err := gconv.Struct(r.GetParam("user"), &user); err != nil {
 		global.FailWithMessage(r, "登录失败")
 		r.Exit()
@@ -186,11 +186,25 @@ func Authenticator(r *ghttp.Request) (interface{}, error) {
 		global.FailWithMessage(r, err.Error())
 		r.Exit()
 	}
-	user, err := service.Login(&L)
+
+	login, err := service.Login(&L)
+
 	if err != nil {
 		global.FailWithMessage(r, err.Error())
 		r.ExitAll()
 	}
-	r.SetParam("user", user) // 设置参数保存到请求中
-	return g.Map{"user_uuid": user.Uuid, "user_id": user.Id, "user_username": user.Username}, nil
+	r.SetParam("user", response.LoginFormat{
+		Id:         login.Id,
+		Uuid:       login.Uuid,
+		Username:   login.Username,
+		Sex:        login.Sex,
+		Enable:     login.Enable,
+		UpdateTime: login.UpdateTime,
+		CreateTime: login.CreateTime,
+		IsAdmin:    login.IsAdmin,
+		Remark:     login.Remark,
+		Avatar:     service.AddUrl(login.Avatar),
+		UserEmail:  login.UserEmail,
+	}) // 设置参数保存到请求中
+	return g.Map{"user_uuid": login.Uuid, "user_id": login.Id, "user_username": login.Username}, nil
 }

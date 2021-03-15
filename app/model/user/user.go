@@ -57,3 +57,7 @@ func (r *Entity) EncryptedPassword() (err error) {
 	}
 	return err
 }
+
+func (r *Entity) ChangeAvatar(path string) {
+	r.Avatar = path
+}

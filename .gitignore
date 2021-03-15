@@ -17,3 +17,5 @@ cbuild
 main
 .vscode
 go.sum
+/gf-music
+config/private.toml
