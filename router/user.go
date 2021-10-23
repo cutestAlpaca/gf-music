@@ -13,10 +13,7 @@ func InitUsersRouter() {
 		middleware.JwtAuth,
 	)
 	{
-<<<<<<< HEAD
 		UserRouter.ALL("hello", v1.Hello)
-=======
 		UserRouter.POST("hello", v1.Hello)
->>>>>>> 9fe917b75b6123615d240c665a2d6bcb3a47d694
 	}
 }
