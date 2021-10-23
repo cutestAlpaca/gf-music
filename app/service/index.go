@@ -51,10 +51,7 @@ func Register(r *request.Register, ip string) (err error) {
 	if err = u.EncryptedPassword(); err != nil { // 哈希加密
 		return errors.New("注册失败")
 	}
-<<<<<<< HEAD
-=======
 
->>>>>>> 9fe917b75b6123615d240c665a2d6bcb3a47d694
 	if _, err = user.Model.Insert(u); err != nil {
 		return errors.New("注册失败")
 	}
